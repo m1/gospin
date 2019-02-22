@@ -11,6 +11,5 @@ matrix:
       env: GO111MODULE=off
     - go: "1.11.x"
       env: GO111MODULE=on
-    - go: tip
   script:
     - go test -v -race $(go list ./... | grep -v vendor)
