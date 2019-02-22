@@ -1,6 +1,6 @@
 # GoSpin
 
-[![GoDoc](https://godoc.org/github.com/m1/gospin?status.svg)](https://godoc.org/github.com/m1/gospin/acme)
+[![GoDoc](https://godoc.org/github.com/m1/gospin?status.svg)](https://godoc.org/github.com/m1/gospin)
 [![Build Status](https://travis-ci.org/m1/gospin.svg?branch=master)](https://travis-ci.org/m1/gospin)
 [![Go Report Card](https://goreportcard.com/badge/github.com/m1/gospin)](https://goreportcard.com/report/github.com/m1/gospin)
 [![Release](https://img.shields.io/github/release/m1/gospin.svg)](https://github.com/m1/gospin/releases/latest)
