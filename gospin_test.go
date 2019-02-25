@@ -12,18 +12,54 @@ func TestSpinner_Spin(t *testing.T) {
 
 	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
-	got := spinner.Spin(simple)
+	got, err := spinner.Spin(simple)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
 
 	escaped := "The \\{escaped\\} {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
 	expected = "The \\{escaped\\} slow brown deer gracefully jumps over the lazy dog"
-	got = spinner.Spin(escaped)
+	got, err = spinner.Spin(escaped)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
 
 	escapedDelimiters := "The \\{escaped\\} {slow|quick} {brown|blue and {red|yellow}} {fox|deer|escaped\\|pipe} {gracefully|} jumps over the {sleeping|lazy} dog"
 	expected = "The \\{escaped\\} slow blue and red escaped\\pipe gracefully jumps over the lazy dog"
-	got = spinner.Spin(escapedDelimiters)
+	got, err = spinner.Spin(escapedDelimiters)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
+}
+
+func TestSpinner_Spin_EndCharFirstChar(t *testing.T) {
+	rand.Seed(1)
+	spinner := New(&Config{UseGlobalRand: true})
+
+	simple := "}The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+	_ = "The slow blue and yellow deer jumps over the sleeping dog"
+	_, err := spinner.Spin(simple)
+	if err == nil {
+		assert.Fail(t, "was expecting error")
+		return
+	}
+	assert.EqualError(t, err, errBracketsNotMatching, "should be equal")
+}
+
+func TestSpinner_Spin_BracketsNotMatchingErr(t *testing.T) {
+	rand.Seed(1)
+	spinner := New(&Config{UseGlobalRand: true})
+
+	simple := "The {slow|quick}} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+	_, err := spinner.Spin(simple)
+	if err == nil {
+		assert.Fail(t, "was expecting error")
+		return
+	}
+	assert.EqualError(t, err, errBracketsNotMatching, "should be equal")
 }
 
 func TestSpinner_Spin_WithCustomConfig(t *testing.T) {
@@ -38,17 +74,26 @@ func TestSpinner_Spin_WithCustomConfig(t *testing.T) {
 
 	simple := "The [slow;quick] [brown;blue and [red;yellow]] [fox;deer] [gracefully;] jumps over the [sleeping;lazy] dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
-	got := spinner.Spin(simple)
+	got, err := spinner.Spin(simple)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
 
 	escaped := "The @[escaped@] [slow;quick] [brown;blue and [red;yellow]] [fox;deer] [gracefully;] jumps over the [sleeping;lazy] dog"
 	expected = "The @[escaped@] slow brown deer gracefully jumps over the lazy dog"
-	got = spinner.Spin(escaped)
+	got, err = spinner.Spin(escaped)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
 
 	escapedDelimiters := "The @[escaped@] [slow;quick] [brown;blue and [red;yellow]] [fox;deer;escaped@;pipe] [gracefully;] jumps over the [sleeping;lazy] dog"
 	expected = "The @[escaped@] slow blue and red escaped@pipe gracefully jumps over the lazy dog"
-	got = spinner.Spin(escapedDelimiters)
+	got, err = spinner.Spin(escapedDelimiters)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got, "should be equal")
 }
 
@@ -66,7 +111,10 @@ func TestSpinner_SpinN(t *testing.T) {
 
 	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
-	got := spinner.SpinN(simple, 100)
+	got, err := spinner.SpinN(simple, 100)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Equal(t, expected, got[0], "should be equal")
 	assert.Len(t, got, 100, "should be equal")
 }
@@ -75,7 +123,10 @@ func TestSpinner_Spin_NoDuplicates(t *testing.T) {
 	spinner := New(nil)
 
 	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
-	got := spinner.SpinN(simple, 100)
+	got, err := spinner.SpinN(simple, 100)
+	if err != nil {
+		assert.Error(t, err)
+	}
 	assert.Len(t, got, 100, "should be equal")
 
 	ok := false

@@ -6,6 +6,7 @@ import (
 	"github.com/m1/gospin"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
 )
 
 var (
@@ -43,11 +44,16 @@ func spinText(_ *cobra.Command, args []string) {
 	}
 	spinner := gospin.New(&cfg)
 	if times == 1 {
-		fmt.Println(spinner.Spin(args[0]))
+		spun, err := spinner.Spin(args[0])
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+		fmt.Println(spun)
 		return
 	}
 
-	spun := spinner.SpinN(args[0], times)
+	spun, err := spinner.SpinN(args[0], times)
 	js, err := json.Marshal(&spun)
 	if err != nil {
 		log.Panic(err)

@@ -1,6 +1,7 @@
 package gospin
 
 import (
+	"errors"
 	"math/rand"
 	"strings"
 	"time"
@@ -11,6 +12,8 @@ const (
 	defaultEndChar       = "}"
 	defaultEscapeChar    = "\\"
 	defaultDelimiterChar = "|"
+
+	errBracketsNotMatching = "brackets aren't matching"
 )
 
 // Config is the struct that holds the configurable settings
@@ -76,44 +79,55 @@ func New(config *Config) *Spinner {
 
 // Spin does the spinning of a string, if `UseGlobalRand` set to
 // false it also sets the seed for the rand
-func (s *Spinner) Spin(str string) string {
+func (s *Spinner) Spin(str string) (string, error) {
 	if !s.Config.UseGlobalRand {
 		rand.Seed(time.Now().UnixNano())
 	}
 	running, step := true, 0
 	var seq string
-	for running {
-		running = s.walk(&seq, &step, &str, 0, 0)
+	var err error
+	for running && err == nil {
+		running, err = s.walk(&seq, &step, &str, 0, 0)
 		step++
 	}
 
-	return seq
+	return seq, err
 }
 
 // SpinN spins a string an N amount of times
-func (s *Spinner) SpinN(str string, times int) []string {
+func (s *Spinner) SpinN(str string, times int) ([]string, error) {
 	var seqs []string
 
 	for i := 0; i < times; i++ {
-		seqs = append(seqs, s.Spin(str))
+		str, err := s.Spin(str)
+		if err != nil {
+			return seqs, err
+		}
+		seqs = append(seqs, str)
 	}
 
-	return seqs
+	return seqs, nil
 }
 
-func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int) bool {
+func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int) (bool, error) {
 	if *step >= len(*str) {
-		return false
+		return false, nil
 	}
 
 	char := string((*str)[*step])
-	if char == s.Config.StartChar && (*step == 0 || string((*str)[*step-1]) != s.Config.EscapeChar) {
+	prevCharNotEscape := *step == 0 || string((*str)[*step-1]) != s.Config.EscapeChar
+	if char == s.Config.StartChar && prevCharNotEscape {
+		var err error
 		start = *step
 		running := true
 		level++
-		for running {
+		for running && err == nil {
 			start++
-			running = s.walk(seq, &start, str, 0, level)
+			running, err = s.walk(seq, &start, str, 0, level)
+		}
+
+		if err != nil {
+			return false, err
 		}
 
 		selected := s.selectOpt((*str)[*step : start+1])
@@ -136,13 +150,17 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 		}
 
 		*step = start
-	} else if char == s.EndChar && string((*str)[*step-1]) != s.EscapeChar {
-		return false
+	} else if char == s.EndChar && prevCharNotEscape {
+		if level == 0 {
+			return false, errors.New(errBracketsNotMatching)
+		}
+
+		return false, nil
 	} else if level == 0 {
 		*seq = *seq + char
 	}
 
-	return true
+	return true, nil
 }
 
 func (s *Spinner) selectOpt(strs string) string {
