@@ -145,3 +145,16 @@ Exit:
 		assert.Fail(t, "no unique values found")
 	}
 }
+
+func TestSpinner_SpinN_BracketsNotMatchingErr(t *testing.T) {
+	rand.Seed(1)
+	spinner := New(&Config{UseGlobalRand: true})
+
+	simple := "The {slow|quick}} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+	_, err := spinner.SpinN(simple, 10)
+	if err == nil {
+		assert.Fail(t, "was expecting error")
+		return
+	}
+	assert.EqualError(t, err, errBracketsNotMatching, "should be equal")
+}

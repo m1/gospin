@@ -126,10 +126,6 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 			running, err = s.walk(seq, &start, str, 0, level)
 		}
 
-		if err != nil {
-			return false, err
-		}
-
 		selected := s.selectOpt((*str)[*step : start+1])
 		if level == 1 {
 			if selected == "" {

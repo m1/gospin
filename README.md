@@ -7,7 +7,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/m1/gospin/badge.svg)](https://coveralls.io/github/m1/gospin)
 
 __Article spinning and spintax/spinning syntax engine written in Go, useful for A/B, testing pieces of text/articles and creating more natural conversations. 
-Use as a library [library](#usage) or as a [CLI](#cli-usage).__
+Use as a [library](#usage) or as a [CLI](#cli-usage).__
 
 ## Installation
 
