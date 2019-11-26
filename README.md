@@ -103,7 +103,7 @@ The \{slow|quick\} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog
 
 Would output something like:
 ```
-The \{slow|quick\} fox jumps over the sleeping dog
+The {slow|quick} fox jumps over the sleeping dog
 ```
 
 You can customize the escape char in the config:
