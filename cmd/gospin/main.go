@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/m1/gospin"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
+
+	"github.com/spf13/cobra"
+
+	"github.com/m1/gospin"
 )
 
 var (
@@ -54,6 +56,11 @@ func spinText(_ *cobra.Command, args []string) {
 	}
 
 	spun, err := spinner.SpinN(args[0], times)
+	if err != nil {
+		log.Panic(err)
+		return
+	}
+
 	js, err := json.Marshal(&spun)
 	if err != nil {
 		log.Panic(err)
