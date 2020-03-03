@@ -110,12 +110,12 @@ func (s *Spinner) SpinN(str string, times int) ([]string, error) {
 }
 
 func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int) (bool, error) {
-	if *step >= len(*str) {
+	if *step >= len([]rune(*str)) {
 		return false, nil
 	}
 
-	char := string((*str)[*step])
-	prevCharNotEscape := *step == 0 || string((*str)[*step-1]) != s.Config.EscapeChar
+	char := string([]rune(*str)[*step])
+	prevCharNotEscape := *step == 0 || string([]rune(*str)[*step-1]) != s.Config.EscapeChar
 	if char == s.Config.StartChar && prevCharNotEscape {
 		var err error
 		start = *step
@@ -126,7 +126,7 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 			running, err = s.walk(seq, &start, str, 0, level)
 		}
 
-		selected := s.selectOpt((*str)[*step : start+1])
+		selected := s.selectOpt(string([]rune(*str)[*step : start+1]))
 		if level == 1 {
 			if selected == "" {
 				// trim due to optional params
@@ -139,8 +139,8 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 			selected = strings.TrimSpace(selected)
 
 			// replace parameter string e.g. {hello|what} with selectedOpt
-			stepDiff := len((*str)[*step:start+1]) - len(selected)
-			*str = strings.Replace(*str, (*str)[*step:start+1], selected, 1)
+			stepDiff := len([]rune(*str)[*step:start+1]) - len([]rune(selected))
+			*str = strings.Replace(*str, string([]rune(*str)[*step:start+1]), selected, 1)
 			*step = *step - stepDiff
 			start = start - stepDiff
 		}
