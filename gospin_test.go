@@ -35,6 +35,35 @@ func TestSpinner_Spin(t *testing.T) {
 	assert.Equal(t, expected, got, "should be equal")
 }
 
+func TestSpinner_Spin_UTF8(t *testing.T) {
+	rand.Seed(1)
+	spinner := New(&Config{UseGlobalRand: true})
+
+	simple := "{Медленный|Быстрый} {бурый|серый с {рыжими пятнами|золотистыми пятнами}} {лис|олень} {с легкостью|} перепрыгнул через {сонную|ленивую} собаку"
+	expected := "Медленный серый с золотистыми пятнами олень перепрыгнул через сонную собаку"
+	got, err := spinner.Spin(simple)
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.Equal(t, expected, got, "should be equal")
+
+	escaped := "\\{Экранированный\\} {бурый|серый с {рыжими пятнами|золотистыми пятнами}} {лис|олень} {с легкостью|} перепрыгнул через {сонную|ленивую} собаку"
+	expected = "\\{Экранированный\\} бурый лис перепрыгнул через сонную собаку"
+	got, err = spinner.Spin(escaped)
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.Equal(t, expected, got, "should be equal")
+
+	escapedDelimiters := "\\{Экранированный\\} {бурый|серый с {рыжими пятнами|золотистыми пятнами}} {экранированная\\|черта|олень} {с легкостью|} перепрыгнул через {сонную|ленивую} собаку"
+	expected = "\\{Экранированный\\} бурый экранированная\\черта перепрыгнул через ленивую собаку"
+	got, err = spinner.Spin(escapedDelimiters)
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.Equal(t, expected, got, "should be equal")
+}
+
 func TestSpinner_Spin_EndCharFirstChar(t *testing.T) {
 	rand.Seed(1)
 	spinner := New(&Config{UseGlobalRand: true})
