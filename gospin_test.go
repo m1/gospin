@@ -10,7 +10,7 @@ func TestSpinner_Spin(t *testing.T) {
 	rand.Seed(1)
 	spinner := New(&Config{UseGlobalRand: true})
 
-	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
 	got, err := spinner.Spin(simple)
 	if err != nil {
@@ -101,7 +101,7 @@ func TestSpinner_Spin_WithCustomConfig(t *testing.T) {
 		UseGlobalRand: true,
 	})
 
-	simple := "The [slow;quick] [brown;blue and [red;yellow]] [fox;deer] [gracefully;] jumps over the [sleeping;lazy] dog"
+	simple := "The [slow;quick] [brown;blue and [red;yellow]] [fox;deer] [gracefully ;]jumps over the [sleeping;lazy] dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
 	got, err := spinner.Spin(simple)
 	if err != nil {
@@ -138,7 +138,7 @@ func TestSpinner_SpinN(t *testing.T) {
 	rand.Seed(1)
 	spinner := New(&Config{UseGlobalRand: true})
 
-	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+	simple := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog"
 	expected := "The slow blue and yellow deer jumps over the sleeping dog"
 	got, err := spinner.SpinN(simple, 100)
 	if err != nil {

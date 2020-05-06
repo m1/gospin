@@ -128,16 +128,10 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 
 		selected := s.selectOpt(string([]rune(*str)[*step : start+1]))
 		if level == 1 {
-			if selected == "" {
-				// trim due to optional params
-				*seq = strings.TrimSpace(*seq)
-			} else {
+			if selected != "" {
 				*seq = *seq + selected
 			}
 		} else {
-			// trim due to optional params
-			selected = strings.TrimSpace(selected)
-
 			// replace parameter string e.g. {hello|what} with selectedOpt
 			stepDiff := len([]rune(*str)[*step:start+1]) - len([]rune(selected))
 			*str = strings.Replace(*str, string([]rune(*str)[*step:start+1]), selected, 1)
