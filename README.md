@@ -49,7 +49,7 @@ A few examples of what the above could output:
 
 You can also have optional phrases, just don't specify a word after or before a pipe to make it optional:
 ```
-{hello|hey} {world|}, how are you today?
+{hello|hey}{ world|}, how are you today?
 ```
 
 A few examples of what the above could output:
@@ -98,7 +98,7 @@ spin := spinner.Spin(simple) // The slow fox jumps over the sleeping dog
 To escape, the default character to use is `\\`, e.g:
 
 ```
-The \{slow|quick\} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog
+The \{slow|quick\} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog
 ```
 
 Would output something like:
@@ -155,7 +155,7 @@ hey friend
 
 To spin multiple, use the `times` flag, this is outputted as json for easier parsing:
 ```
-➜  ~ gospin "The {slow|quick} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog" --times=5 | jq
+➜  ~ gospin "The {slow|quick} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog" --times=5 | jq
 [
   "The slow fox gracefully jumps over the sleeping dog",
   "The slow deer jumps over the lazy dog",
