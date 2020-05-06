@@ -69,7 +69,7 @@ To use as a library is pretty simple:
 
 ```go
 spinner := gospin.New(nil)
-simple := "The {slow|quick} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+simple := "The {slow|quick} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog"
 
 spin := spinner.Spin(simple) // The slow fox jumps over the sleeping dog
 spins := spinner.SpinN(simple, 10)
@@ -89,7 +89,7 @@ spinner := gospin.New(&gospin.Config{
         EndChar:       "]",
         DelimiterChar: ";",
 })
-simple := "The [slow;quick] [fox;deer] [gracefully;] jumps over the [sleeping;lazy] dog"
+simple := "The [slow;quick] [fox;deer] [gracefully ;]jumps over the [sleeping;lazy] dog"
 spin := spinner.Spin(simple) // The slow fox jumps over the sleeping dog
 ```
 
@@ -111,7 +111,7 @@ You can customize the escape char in the config:
 spinner := gospin.New(&gospin.Config{
         EscapeChar:    "@",
 })
-simple := "The @{slow|quick@} {fox|deer} {gracefully|} jumps over the {sleeping|lazy} dog"
+simple := "The @{slow|quick@} {fox|deer} {gracefully |}jumps over the {sleeping|lazy} dog"
 spin := spinner.Spin(simple) // The @{slow|quick@} fox jumps over the sleeping dog
 ```
 
