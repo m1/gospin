@@ -35,7 +35,7 @@ func TestSpinner_Spin(t *testing.T) {
 	assert.Equal(t, expected, got, "should be equal")
 
 	nested := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully |}jumps over the {{slow|quick} {fox|deer}}"
-	expected = "The slow blue and yellow fox jumps over the brown deer"
+	expected = "The slow blue and yellow fox jumps over the quick fox"
 	got, err = spinner.Spin(nested)
 	if err != nil {
 		assert.Error(t, err)
