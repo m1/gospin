@@ -134,7 +134,7 @@ func (s *Spinner) walk(seq *string, step *int, str *string, start int, level int
 		} else {
 			// replace parameter string e.g. {hello|what} with selectedOpt
 			stepDiff := len([]rune(*str)[*step:start+1]) - len([]rune(selected))
-			*str = strings.Replace(*str, string([]rune(*str)[*step:start+1]), selected, 1)
+			*str = string([]rune(*str)[:*step]) + selected + string([]rune(*str)[start+1:])
 			*step = *step - stepDiff
 			start = start - stepDiff
 		}
