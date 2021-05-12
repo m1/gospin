@@ -33,6 +33,14 @@ func TestSpinner_Spin(t *testing.T) {
 		assert.Error(t, err)
 	}
 	assert.Equal(t, expected, got, "should be equal")
+
+	nested := "The {slow|quick} {brown|blue and {red|yellow}} {fox|deer} {gracefully |}jumps over the {{slow|quick} {fox|deer}}"
+	expected = "The slow blue and yellow fox jumps over the quick fox"
+	got, err = spinner.Spin(nested)
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.Equal(t, expected, got, "should be equal")
 }
 
 func TestSpinner_Spin_UTF8(t *testing.T) {
@@ -58,6 +66,14 @@ func TestSpinner_Spin_UTF8(t *testing.T) {
 	escapedDelimiters := "\\{Экранированный\\} {бурый|серый с {рыжими пятнами|золотистыми пятнами}} {экранированная\\|черта|олень} {с легкостью |}перепрыгнул через {сонную|ленивую} собаку"
 	expected = "\\{Экранированный\\} бурый экранированная\\черта перепрыгнул через ленивую собаку"
 	got, err = spinner.Spin(escapedDelimiters)
+	if err != nil {
+		assert.Error(t, err)
+	}
+	assert.Equal(t, expected, got, "should be equal")
+
+	nested := "{Медленный|Быстрый} {бурый|серый с {рыжими пятнами|золотистыми пятнами}} {лис|олень} {с легкостью |}перепрыгнул через {{сонного|ленивого} {волка|оленя}}"
+	expected = "Медленный бурый олень перепрыгнул через сонного оленя"
+	got, err = spinner.Spin(nested)
 	if err != nil {
 		assert.Error(t, err)
 	}
